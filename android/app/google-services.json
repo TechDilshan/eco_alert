@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "360032768976",
+    "project_id": "eco-alert-fdbcd",
+    "storage_bucket": "eco-alert-fdbcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:360032768976:android:cce60a231350abc2b21fd5",
+        "android_client_info": {
+          "package_name": "com.example.eco_alert"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBarC7twNCMJeqoewN3YnXJ1omCrvrgDXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
