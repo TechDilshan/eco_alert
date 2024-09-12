@@ -48,7 +48,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // SignUp Container
                 Container(
                   padding: const EdgeInsets.all(20),
-                  margin: const EdgeInsets.symmetric(horizontal: 20), // Add left and right margin
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.25),
                     borderRadius: BorderRadius.circular(15),

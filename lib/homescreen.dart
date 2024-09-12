@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart'; // Import the login screen
+import 'myaccount.dart'; // Import the my account screen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -27,6 +28,17 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         backgroundColor: const Color.fromARGB(255, 125, 44, 176),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyAccountScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
