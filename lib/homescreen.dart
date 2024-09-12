@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'login.dart'; // Import the login screen
-import 'myaccount.dart'; // Import the my account screen
+import 'login.dart'; // Import your LoginScreen
+import 'myaccount.dart'; // Import your MyAccountScreen
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
