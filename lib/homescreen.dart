@@ -6,6 +6,8 @@ import 'login.dart'; // Import your LoginScreen
 import 'myaccount.dart'; // Import your MyAccountScreen
 import 'map.dart'; // Import your MapScreen
 import 'placescreen.dart';
+import 'newsscreen.dart';
+import 'donationscreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -72,7 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       _buildClimateScreen(), // Display the climate screen for the home tab
       MapScreen(), // Display the MapScreen for the places tab
       PlaceScreen(),
-      MyAccountScreen(), // Display MyAccountScreen for the account tab
+      NewsScreen(), // Display NewsScreen for the account tab
+      DonationScreen(),
     ];
 
     String appBarTitle = '';
@@ -87,7 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
         appBarTitle = 'Places';
         break;
       case 3:
-        appBarTitle = 'My Account';
+        appBarTitle = 'News';
+      case 4:
+        appBarTitle = 'Donation';
         break;
     }
 
@@ -95,19 +100,17 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(appBarTitle),
         backgroundColor: const Color.fromARGB(255, 125, 44, 176),
-        actions: _selectedIndex == 0
-            ? [
-                IconButton(
-                  icon: const Icon(Icons.person),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const MyAccountScreen()),
-                    );
-                  },
-                ),
-              ]
-            : null,
+        actions:[
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const MyAccountScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: _screens[_selectedIndex], // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(
@@ -127,8 +130,12 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Places',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'My Account',
+            icon: Icon(Icons.newspaper),
+            label: 'News',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'Donation',
           ),
         ],
         selectedItemColor: Colors.purple, // Change the active item color
