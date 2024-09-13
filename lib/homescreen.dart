@@ -8,6 +8,7 @@ import 'map.dart'; // Import your MapScreen
 import 'placescreen.dart';
 import 'newsscreen.dart';
 import 'donationscreen.dart';
+import 'weatherforecast.dart'; // Import your WeatherForecastScreen
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
         break;
       case 3:
         appBarTitle = 'News';
+        break;
       case 4:
         appBarTitle = 'Donation';
         break;
@@ -100,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text(appBarTitle),
         backgroundColor: const Color.fromARGB(255, 125, 44, 176),
-        actions:[
+        actions: [
           IconButton(
             icon: const Icon(Icons.person),
             onPressed: () {
@@ -173,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     children: [
                       Text(
-                        "${weatherData!['main']['temp']}°", // Use null check operator
+                        "${weatherData!['main']['temp']}°",
                         style: TextStyle(
                           fontSize: 64,
                           fontWeight: FontWeight.bold,
@@ -238,6 +240,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             value: "${weatherData!['main']['pressure']} mb",
                           ),
                         ],
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WeatherForecast(),
+                            ),
+                          );
+                        },
+                        child: Text('View Forecast'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.purple,
+                        ),
                       ),
                     ],
                   ),
