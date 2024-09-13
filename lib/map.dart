@@ -14,6 +14,7 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final TextEditingController _cityController = TextEditingController();
   final String _apiKey = '15a89774b7e893533583e1f131dec3ba';
+  int _selectedIndex = 2; // To keep track of the selected tab
 
   Future<void> _searchCityWeather() async {
     final cityName = _cityController.text;
@@ -52,12 +53,20 @@ class _MapScreenState extends State<MapScreen> {
     }
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    // You can navigate to different screens based on the selected index
+    // For example:
+    // if (index == 0) Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    // if (index == 1) Navigator.push(context, MaterialPageRoute(builder: (context) => ClimateScreen()));
+    // if (index == 3) Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Weather Map for Cities'),
-      ),
       body: Column(
         children: [
           Padding(
@@ -84,7 +93,6 @@ class _MapScreenState extends State<MapScreen> {
           Expanded(
             child: FlutterMap(
               options: const MapOptions(
-                //center: LatLng(7.8731, 80.7718), // Center on Sri Lanka
                 minZoom: 8.0,
               ),
               children: [

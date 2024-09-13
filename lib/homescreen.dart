@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'login.dart'; // Import your LoginScreen
 import 'myaccount.dart'; // Import your MyAccountScreen
 import 'map.dart'; // Import your MapScreen
+import 'placescreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -68,30 +69,45 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
-      _selectedIndex == 0
-          ? _buildClimateScreen() // Home screen content (Separate widget)
-          : _selectedIndex == 1
-              ? _buildClimateScreen()
-              : _selectedIndex == 2
-                  ? MapScreen()
-                  : MyAccountScreen(), // Other screens
+      _buildClimateScreen(), // Display the climate screen for the home tab
+      MapScreen(), // Display the MapScreen for the places tab
+      PlaceScreen(),
+      MyAccountScreen(), // Display MyAccountScreen for the account tab
     ];
+
+    String appBarTitle = '';
+    switch (_selectedIndex) {
+      case 0:
+        appBarTitle = 'Home';
+        break;
+      case 1:
+        appBarTitle = 'Climate';
+        break;
+      case 2:
+        appBarTitle = 'Places';
+        break;
+      case 3:
+        appBarTitle = 'My Account';
+        break;
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: Text(appBarTitle),
         backgroundColor: const Color.fromARGB(255, 125, 44, 176),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyAccountScreen()),
-              );
-            },
-          ),
-        ],
+        actions: _selectedIndex == 0
+            ? [
+                IconButton(
+                  icon: const Icon(Icons.person),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MyAccountScreen()),
+                    );
+                  },
+                ),
+              ]
+            : null,
       ),
       body: _screens[_selectedIndex], // Display the selected screen
       bottomNavigationBar: BottomNavigationBar(
@@ -258,16 +274,6 @@ class WeatherInfoCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-// Separate widget for home screen content
-class HomeScreenContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text("Home Screen Content"),
     );
   }
 }
