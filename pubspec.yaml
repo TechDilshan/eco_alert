@@ -32,12 +32,12 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.6
   firebase_core: ^3.4.1
-  firebase_auth: ^5.2.0
-  cloud_firestore: ^5.3.0
+  firebase_auth: ^5.2.1
+  cloud_firestore: ^5.4.1
   flutter_map: ^7.0.2
-  latlong2: ^0.9.1
+  webview_flutter: ^4.9.0
   http: ^1.2.2
-  webview_flutter: ^4.0.1
+  latlong2: ^0.9.1
 
 
 
