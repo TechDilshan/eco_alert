@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class AddSafetyPlacePage extends StatefulWidget {
   @override
@@ -17,74 +17,151 @@ class _AddSafetyPlacePageState extends State<AddSafetyPlacePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Safety Place'),
-        backgroundColor: const Color.fromARGB(255, 73, 95, 222),
+        backgroundColor: Colors.purple, // Set the AppBar background color
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Safe Location Input Field
-              TextField(
-                controller: _locationController,
-                decoration: InputDecoration(
-                  labelText: 'Safe Location',
-                  border: OutlineInputBorder(),
-                ),
-                maxLength: 100,
-              ),
-              const SizedBox(height: 16),
-              
-              // Description Input Field
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: 'Description',
-                  border: OutlineInputBorder(),
-                ),
-                maxLength: 250,
-                maxLines: 3,
-              ),
-              const SizedBox(height: 16),
-              
-              // Mobile Number Input Field
-              TextField(
-                controller: _mobileNoController,
-                decoration: InputDecoration(
-                  labelText: 'Mobile Number',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.phone,
-              ),
-              const SizedBox(height: 16),
-              
-              // Number of People Input Field
-              TextField(
-                controller: _numPeopleController,
-                decoration: InputDecoration(
-                  labelText: 'Number of People Who Can Stay',
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-              ),
-              const SizedBox(height: 32),
-              
-              // Submit Button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _submitSafetyPlace,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                  ),
-                  child: const Text(
-                    'Submit',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                ),
-              ),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xFF91EAE4),
+              Color(0xFF86A8E7),
+              Color(0xFF7F7FD5),
             ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // App Logo (Optional)
+                // Image.asset(
+                //   'assets/logo.png', // Replace with your logo asset path
+                //   height: 70,
+                // ),
+                // const SizedBox(height: 40),
+                // Safety Place Container
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Page Title
+                      const Text(
+                        'Add Safety Place',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      // Safe Location Input Field
+                      TextField(
+                        controller: _locationController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          hintText: 'Safe Location',
+                          prefixIcon: const Icon(Icons.location_on,
+                              color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        maxLength: 100,
+                      ),
+                      const SizedBox(height: 20),
+                      // Description Input Field
+                      TextField(
+                        controller: _descriptionController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          hintText: 'Description',
+                          prefixIcon: const Icon(Icons.description,
+                              color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        maxLength: 250,
+                        maxLines: 3,
+                      ),
+                      const SizedBox(height: 20),
+                      // Mobile Number Input Field
+                      TextField(
+                        controller: _mobileNoController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          hintText: 'Mobile Number',
+                          prefixIcon:
+                              const Icon(Icons.phone, color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        keyboardType: TextInputType.phone,
+                      ),
+                      const SizedBox(height: 20),
+                      // Number of People Input Field
+                      TextField(
+                        controller: _numPeopleController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          hintText: 'Number of People Who Can Stay',
+                          prefixIcon:
+                              const Icon(Icons.group, color: Colors.white),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                        style: const TextStyle(color: Colors.white),
+                        keyboardType: TextInputType.number,
+                      ),
+                      const SizedBox(height: 20),
+                      // Submit Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: _submitSafetyPlace,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.purple, // Consistent button color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          child: const Text(
+                            'Add',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -97,7 +174,10 @@ class _AddSafetyPlacePageState extends State<AddSafetyPlacePage> {
     final mobileNo = _mobileNoController.text.trim();
     final numPeople = _numPeopleController.text.trim();
 
-    if (location.isEmpty || description.isEmpty || mobileNo.isEmpty || numPeople.isEmpty) {
+    if (location.isEmpty ||
+        description.isEmpty ||
+        mobileNo.isEmpty ||
+        numPeople.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
