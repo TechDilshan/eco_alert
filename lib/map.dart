@@ -14,13 +14,18 @@ class MapScreen extends StatefulWidget {
 class _MapScreenState extends State<MapScreen> {
   final TextEditingController _cityController = TextEditingController();
   final String _apiKey = '15a89774b7e893533583e1f131dec3ba';
-  int _selectedIndex = 2; // To keep track of the selected tab
+  MapController _mapController = MapController();
 
+  List<Marker> _markers = [];
+  LatLng _defaultCenter = LatLng(7.8731, 80.7718); // Default center in Sri Lanka
+
+  // Function to search city weather and add a marker
   Future<void> _searchCityWeather() async {
     final cityName = _cityController.text;
     if (cityName.isNotEmpty) {
       final response = await http.get(
-        Uri.parse('https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$_apiKey&units=metric')
+        Uri.parse(
+            'https://api.openweathermap.org/data/2.5/weather?q=$cityName&appid=$_apiKey&units=metric'),
       );
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -31,46 +36,126 @@ class _MapScreenState extends State<MapScreen> {
         final humidity = data['main']['humidity'];
         final description = data['weather'][0]['description'];
 
-        // Display weather information
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(cityName),
-            content: Text(
-              'Temperature: $temp°C\nPressure: $pressure hPa\nHumidity: $humidity%\nWeather: $description',
-            ),
-            actions: [
-              TextButton(
-                child: Text('OK'),
-                onPressed: () => Navigator.of(context).pop(),
+        // Add marker for searched city
+        setState(() {
+          _markers.add(
+            Marker(
+              width: 80.0,
+              height: 80.0,
+              point: LatLng(lat, lon),
+              builder: (ctx) => IconButton(
+                icon: Icon(Icons.location_on, color: Colors.red, size: 40),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text(cityName),
+                      content: Text(
+                        'Temperature: $temp°C\nPressure: $pressure hPa\nHumidity: $humidity%\nWeather: $description',
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text('OK'),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
-        );
+            ),
+          );
+          _mapController.move(LatLng(lat, lon), 10.0);
+        });
       } else {
         throw Exception('Failed to load weather data');
       }
     }
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+  // Initial predefined cities in Sri Lanka
+  List<Map<String, dynamic>> _cities = [
+    {'name': 'Colombo', 'lat': 6.9271, 'lon': 79.8612},
+    {'name': 'Kandy', 'lat': 7.2906, 'lon': 80.6337},
+    {'name': 'Galle', 'lat': 6.0324, 'lon': 80.2197},
+    {'name': 'Jaffna', 'lat': 9.6615, 'lon': 80.0250},
+    {'name': 'Batticaloa', 'lat': 7.7292, 'lon': 81.7139},
+    {'name': 'Puttalam', 'lat': 8.0336, 'lon': 79.8385},
+    {'name': 'Anuradhapura', 'lat': 8.3114, 'lon': 80.4037},
+    {'name': 'Badulla', 'lat': 6.9896, 'lon': 81.0556},
+    {'name': 'Ratnapura', 'lat': 6.6828, 'lon': 80.3993},
+    // Add more cities as needed
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _addPredefinedCityMarkers();
+  }
+
+  void _addPredefinedCityMarkers() {
+    // Adding predefined markers for Sri Lanka's cities
+    _cities.forEach((city) {
+      setState(() {
+        _markers.add(
+          Marker(
+            width: 80.0,
+            height: 80.0,
+            point: LatLng(city['lat'], city['lon']),
+            builder: (ctx) => IconButton(
+              icon: Icon(Icons.location_on, color: Colors.blue, size: 40),
+              onPressed: () {
+                _fetchWeatherForCity(city['name'], city['lat'], city['lon']);
+              },
+            ),
+          ),
+        );
+      });
     });
-    // You can navigate to different screens based on the selected index
-    // For example:
-    // if (index == 0) Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-    // if (index == 1) Navigator.push(context, MaterialPageRoute(builder: (context) => ClimateScreen()));
-    // if (index == 3) Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountScreen()));
+  }
+
+  // Function to fetch weather data for predefined cities
+  Future<void> _fetchWeatherForCity(String cityName, double lat, double lon) async {
+    final response = await http.get(
+      Uri.parse(
+          'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$_apiKey&units=metric'),
+    );
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final temp = data['main']['temp'];
+      final pressure = data['main']['pressure'];
+      final humidity = data['main']['humidity'];
+      final description = data['weather'][0]['description'];
+
+      // Show weather information in a dialog
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(cityName),
+          content: Text(
+            'Temperature: $temp°C\nPressure: $pressure hPa\nHumidity: $humidity%\nWeather: $description',
+          ),
+          actions: [
+            TextButton(
+              child: Text('OK'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    } else {
+      throw Exception('Failed to load weather data');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 170, 215, 231),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
                 Expanded(
@@ -92,14 +177,20 @@ class _MapScreenState extends State<MapScreen> {
           ),
           Expanded(
             child: FlutterMap(
-              options: const MapOptions(
-                minZoom: 8.0,
+              mapController: _mapController,
+              options: MapOptions(
+                center: _defaultCenter,
+                zoom: 7.0,
+                minZoom: 2.0,
               ),
               children: [
                 TileLayer(
                   urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: ['a', 'b', 'c'],
                 ),
-                // MarkerLayer has been removed
+                MarkerLayer(
+                  markers: _markers, // Combining friend's markers with dynamic ones
+                ),
               ],
             ),
           ),
