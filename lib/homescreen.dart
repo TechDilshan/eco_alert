@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'myaccount.dart'; // Import your MyAccountScreen
 import 'map.dart'; // Import your MapScreen
 import 'placescreen.dart';
+import 'impactMapScreen.dart';
 import 'newsscreen.dart';
 import 'donationscreen.dart';
 import 'weatherforecast.dart'; // Import your WeatherForecastScreen
@@ -86,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
       _buildClimateScreen(), // Display the climate screen for the home tab
-      MapScreen(), // Display the MapScreen for the places tab
+      Impactmapscreen(), // Display the MapScreen for the places tab
       PlaceScreen(),
       NewsScreen(), // Display NewsScreen for the account tab
       DonationScreen(),
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
         appBarTitle = 'Home';
         break;
       case 1:
-        appBarTitle = 'Climate';
+        appBarTitle = 'Impact map';
         break;
       case 2:
         appBarTitle = 'Places';
@@ -205,8 +206,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      // Add margin before the weather info boxes
-                      SizedBox(height: 20), // Adjust this value for desired margin
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -226,7 +225,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20), // Margin between rows
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -246,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20), // Margin between rows
+                      SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -267,27 +266,57 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WeatherForecast(),
+                      // Inline Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => WeatherForecast(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.calendar_today),
+                            label: Text(
+                              'Forecast',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromARGB(255, 198, 193, 193),
+                              ),
                             ),
-                          );
-                        },
-                        child: Text(
-                          'View Forecast',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color.fromARGB(255, 41, 12, 136), // Background color
+                              padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                            ),
                           ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: const Color.fromARGB(255, 110, 79, 211), // Text color
-                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                        ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MapScreen(),
+                                ),
+                              );
+                            },
+                            icon: Icon(Icons.map),
+                            label: Text(
+                              'View Map',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: const Color.fromARGB(255, 198, 193, 193),
+                              ),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color.fromARGB(255, 41, 12, 136), // Background color
+                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -298,6 +327,9 @@ class _HomeScreenState extends State<HomeScreen> {
         : const Center(child: CircularProgressIndicator()),
   );
 }
+
+
+
 
 }
 

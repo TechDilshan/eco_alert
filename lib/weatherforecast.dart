@@ -177,7 +177,7 @@ String _getMonthName(int month) {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text('5 Days Weather Forecast'),
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
         elevation: 0,
       ),
       body: Stack(

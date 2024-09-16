@@ -151,11 +151,18 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        title: Text('Climate Map'),
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
+        elevation: 0,
+      ),
       backgroundColor: Color.fromARGB(255, 170, 215, 231),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            // padding: EdgeInsets.only(top: 100),
+           padding: const EdgeInsets.fromLTRB(10.0, 100.0, 10.0, 10.0),
             child: Row(
               children: [
                 Expanded(
