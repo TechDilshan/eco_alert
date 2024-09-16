@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'login.dart'; // Import your LoginScreen
 
 class MyAccountScreen extends StatefulWidget {
   const MyAccountScreen({super.key});
@@ -50,7 +51,9 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   void _logout() async {
     try {
       await _auth.signOut();
-      Navigator.of(context).pop(); // Navigate back or to the login screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const LoginScreen()), // Navigate to LoginScreen
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to logout: $e')),
@@ -63,7 +66,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Account'),
-        backgroundColor: const Color.fromARGB(255, 125, 44, 176),
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -83,7 +86,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: CircleAvatar(
-                radius: 50,
+                radius: 70, // Increased profile picture size
                 backgroundImage: _userData?['profilePicture'] != null
                     ? NetworkImage(_userData!['profilePicture'])
                     : AssetImage('assets/default_profile.png') as ImageProvider, // Replace with your default image
@@ -96,32 +99,49 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                   padding: const EdgeInsets.all(20),
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.25),
+                    color: Colors.black.withOpacity(0.4),
                     borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 10,
+                        offset: Offset(0, 4), // changes position of shadow
+                      ),
+                    ],
                   ),
                   child: _userData == null
                       ? const Center(child: CircularProgressIndicator())
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text(
-                              'Name: ${_userData!['name']}',
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Email: ${_userData!['email']}',
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Phone: ${_userData!['phone']}',
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Location: ${_userData!['location']}',
-                              style: const TextStyle(fontSize: 20, color: Colors.white),
+                            _buildUserDetailRow('Name', _userData!['name']),
+                            _buildUserDetailRow('Email', _userData!['email']),
+                            _buildUserDetailRow('Phone', _userData!['phone']),
+                            _buildUserDetailRow('Location', _userData!['location']),
+                            const SizedBox(height: 20), // Space before the button
+                            Center(
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  // Handle Edit Details button press
+                                },
+                                icon: const Icon(Icons.edit, color: Colors.white), // Edit icon
+                                label: const Text(
+                                  'Edit Details',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF2F4299), // Button color
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -132,7 +152,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: SizedBox(
-                width: double.infinity,
+                width: 200, // Fixed width for logout button
                 child: ElevatedButton(
                   onPressed: _logout,
                   style: ElevatedButton.styleFrom(
@@ -153,6 +173,36 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildUserDetailRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '$label:',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value ?? 'Not available',
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.right,
+            ),
+          ),
+        ],
       ),
     );
   }

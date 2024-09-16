@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'login.dart'; // Import your LoginScreen
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'myaccount.dart'; // Import your MyAccountScreen
 import 'map.dart'; // Import your MapScreen
 import 'placescreen.dart';
@@ -19,15 +19,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-  String cityName = "Colombo";
+  String cityName = "Colombo"; // Default city
   String apiKey = "15a89774b7e893533583e1f131dec3ba";
   Map<String, dynamic>? weatherData; // Make weatherData nullable
-  TextEditingController cityController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
   void initState() {
     super.initState();
-    fetchWeather(cityName);
+    _loadUserLocation();
+  }
+
+  Future<void> _loadUserLocation() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User not authenticated.')),
+        );
+        return;
+      }
+
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists && userDoc.data()?['location'] != null) {
+        setState(() {
+          cityName = userDoc.data()!['location'];
+        });
+        fetchWeather(cityName);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User location not available.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load user location: $e')),
+      );
+    }
   }
 
   Future<void> fetchWeather(String city) async {
@@ -53,21 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> _signOut(BuildContext context) async {
-    try {
-      await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to sign out: $e'),
-        ),
-      );
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
-        backgroundColor: const Color.fromARGB(255, 125, 44, 176),
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -147,122 +162,125 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildClimateScreen() {
-    return weatherData != null
-        ? SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextField(
-                    controller: cityController,
-                    decoration: InputDecoration(
-                      labelText: "Enter City Name",
-                      suffixIcon: IconButton(
-                        icon: Icon(Icons.search),
-                        onPressed: () {
-                          setState(() {
-                            cityName = cityController.text;
-                            fetchWeather(cityName);
-                          });
-                        },
-                      ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Color.fromARGB(255, 145, 234, 228),
+            Color.fromARGB(255, 127, 127, 213),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: weatherData != null
+          ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "${weatherData!['main']['temp']}°",
+                          style: TextStyle(
+                            fontSize: 64,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          weatherData!['weather'][0]['description'],
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Text(
+                          "${weatherData!['name']}, ${weatherData!['sys']['country']}",
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[300],
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            WeatherInfoCard(
+                              icon: Icons.thermostat_outlined,
+                              label: "Feels Like",
+                              value: "${weatherData!['main']['feels_like']}°",
+                            ),
+                            WeatherInfoCard(
+                              icon: Icons.water_drop_outlined,
+                              label: "Humidity",
+                              value: "${weatherData!['main']['humidity']}%",
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            WeatherInfoCard(
+                              icon: Icons.remove_red_eye_outlined,
+                              label: "Visibility",
+                              value: "${weatherData!['visibility'] / 1000}km",
+                            ),
+                            WeatherInfoCard(
+                              icon: Icons.wb_sunny_outlined,
+                              label: "UV Index",
+                              value: "1 (L)", // Placeholder for UV Index
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            WeatherInfoCard(
+                              icon: Icons.air,
+                              label: "Wind",
+                              value: "${weatherData!['wind']['speed']} km/h",
+                            ),
+                            WeatherInfoCard(
+                              icon: Icons.speed_outlined,
+                              label: "Pressure",
+                              value: "${weatherData!['main']['pressure']} mb",
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WeatherForecast(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'View Forecast',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 110, 79, 211), // Text color
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        "${weatherData!['main']['temp']}°",
-                        style: TextStyle(
-                          fontSize: 64,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        weatherData!['weather'][0]['description'],
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Text(
-                        "${weatherData!['name']}, ${weatherData!['sys']['country']}",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          WeatherInfoCard(
-                            icon: Icons.thermostat_outlined,
-                            label: "Feels Like",
-                            value: "${weatherData!['main']['feels_like']}°",
-                          ),
-                          WeatherInfoCard(
-                            icon: Icons.water_drop_outlined,
-                            label: "Humidity",
-                            value: "${weatherData!['main']['humidity']}%",
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          WeatherInfoCard(
-                            icon: Icons.remove_red_eye_outlined,
-                            label: "Visibility",
-                            value: "${weatherData!['visibility'] / 1000}km",
-                          ),
-                          WeatherInfoCard(
-                            icon: Icons.wb_sunny_outlined,
-                            label: "UV Index",
-                            value: "1 (L)", // Placeholder for UV Index
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          WeatherInfoCard(
-                            icon: Icons.air,
-                            label: "Wind",
-                            value: "${weatherData!['wind']['speed']} km/h",
-                          ),
-                          WeatherInfoCard(
-                            icon: Icons.speed_outlined,
-                            label: "Pressure",
-                            value: "${weatherData!['main']['pressure']} mb",
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WeatherForecast(),
-                            ),
-                          );
-                        },
-                        child: Text('View Forecast'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.purple,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          )
-        : Center(child: CircularProgressIndicator());
+                ],
+              ),
+            )
+          : const Center(child: CircularProgressIndicator()),
+    );
   }
 }
 
@@ -276,23 +294,21 @@ class WeatherInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.blueAccent.withOpacity(0.7),
+      color: const Color.fromARGB(255, 12, 72, 177).withOpacity(0.7),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
             Icon(icon, color: Colors.white),
-            SizedBox(height: 10),
             Text(
               label,
               style: TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 5),
             Text(
               value,
               style: TextStyle(
+                fontSize: 16,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ],
