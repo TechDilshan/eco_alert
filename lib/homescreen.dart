@@ -82,8 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> _screens = [
@@ -162,126 +160,145 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildClimateScreen() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color.fromARGB(255, 145, 234, 228),
-            Color.fromARGB(255, 127, 127, 213),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
+  return Container(
+    constraints: BoxConstraints.expand(), // Make the container expand to cover the full screen
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Color.fromARGB(255, 145, 234, 228),
+          Color.fromARGB(255, 127, 127, 213),
+        ],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
       ),
-      child: weatherData != null
-          ? SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Text(
-                          "${weatherData!['main']['temp']}°",
-                          style: TextStyle(
-                            fontSize: 64,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+    ),
+    child: weatherData != null
+        ? SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Text(
+                        "${weatherData!['main']['temp']}°",
+                        style: TextStyle(
+                          fontSize: 64,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                        Text(
-                          weatherData!['weather'][0]['description'],
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
+                      ),
+                      Text(
+                        weatherData!['weather'][0]['description'],
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
                         ),
-                        Text(
-                          "${weatherData!['name']}, ${weatherData!['sys']['country']}",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey[300],
-                          ),
+                      ),
+                      Text(
+                        "${weatherData!['name']}, ${weatherData!['sys']['country']}",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey[300],
                         ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            WeatherInfoCard(
+                      ),
+                      SizedBox(height: 20),
+                      // Add margin before the weather info boxes
+                      SizedBox(height: 20), // Adjust this value for desired margin
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.thermostat_outlined,
                               label: "Feels Like",
                               value: "${weatherData!['main']['feels_like']}°",
                             ),
-                            WeatherInfoCard(
+                          ),
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.water_drop_outlined,
                               label: "Humidity",
                               value: "${weatherData!['main']['humidity']}%",
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            WeatherInfoCard(
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20), // Margin between rows
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.remove_red_eye_outlined,
                               label: "Visibility",
                               value: "${weatherData!['visibility'] / 1000}km",
                             ),
-                            WeatherInfoCard(
+                          ),
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.wb_sunny_outlined,
                               label: "UV Index",
                               value: "1 (L)", // Placeholder for UV Index
                             ),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            WeatherInfoCard(
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20), // Margin between rows
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.air,
                               label: "Wind",
                               value: "${weatherData!['wind']['speed']} km/h",
                             ),
-                            WeatherInfoCard(
+                          ),
+                          Expanded(
+                            child: WeatherInfoCard(
                               icon: Icons.speed_outlined,
                               label: "Pressure",
                               value: "${weatherData!['main']['pressure']} mb",
                             ),
-                          ],
-                        ),
-                        SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => WeatherForecast(),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            'View Forecast',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => WeatherForecast(),
                             ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white, backgroundColor: const Color.fromARGB(255, 110, 79, 211), // Text color
-                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          );
+                        },
+                        child: Text(
+                          'View Forecast',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ],
-                    ),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: const Color.fromARGB(255, 110, 79, 211), // Text color
+                          padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            )
-          : const Center(child: CircularProgressIndicator()),
-    );
-  }
+                ),
+              ],
+            ),
+          )
+        : const Center(child: CircularProgressIndicator()),
+  );
+}
+
 }
 
 class WeatherInfoCard extends StatelessWidget {
