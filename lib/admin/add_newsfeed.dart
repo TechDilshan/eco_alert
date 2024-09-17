@@ -47,27 +47,45 @@ class _AddNewsFeedState extends State<AddNewsFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 51, 142, 217),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
               "Add News ",
               style: TextStyle(
-                  color: Colors.blue,
+                  color: Color(0xFF1E3A8A),
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold),
             ),
             Text(
               "Feed",
               style: TextStyle(
-                  color: Colors.orange,
+                 color: Color(0xFF1E3A8A),
                   fontSize: 24.0,
                   fontWeight: FontWeight.bold),
             )
           ],
         ),
       ),
-      body: SingleChildScrollView(
+      body:  Stack(
+        children: [
+          // Gradient background
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF91EAE4),
+                  Color(0xFF86A8E7),
+                  Color(0xFF7F7FD5),
+                ],
+              ),
+            ),
+          ),
+          // Main content
+      SingleChildScrollView(
         child: Container(
           margin: EdgeInsets.only(left: 20.0, top: 20.0, right: 20.0),
           child: Column(
@@ -170,17 +188,26 @@ class _AddNewsFeedState extends State<AddNewsFeed> {
               SizedBox(height: 20.0),
               Center(
                 child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                backgroundColor: const Color.fromARGB(255, 51, 142, 217),
+                padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0), // Increase button size
+                shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),   
+    ),
                   onPressed: _uploadNewsFeed,
                   child: Text(
-                    "Add",
+                    "Add News Feed",
                     style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              )
-            ],
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,color: Colors.black),
+              ),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

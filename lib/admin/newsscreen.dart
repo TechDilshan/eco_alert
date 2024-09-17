@@ -55,16 +55,16 @@ class _NewsScreenState extends State<NewsScreen> {
     );
   }
 
-  // Method to delete news feed
+  // Method to Delete News Feed
   Future<void> _deleteNewsFeed(String documentId) async {
     try {
       await FirebaseFirestore.instance.collection('news').doc(documentId).delete();
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('News feed deleted successfully')),
+        const SnackBar(content: Text('News Feed Deleted Successfully')),
       );
     } catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to delete news feed')),
+        const SnackBar(content: Text('Failed to Delete News Feed')),
       );
     }
   }
@@ -79,31 +79,54 @@ class _NewsScreenState extends State<NewsScreen> {
             MaterialPageRoute(builder: (context) => const AddNewsFeed()),
           );
         },
+        backgroundColor: Color(0xFF1E3A8A),
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 51, 142, 217), // Blue theme color for the AppBar
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
             Text(
               "News ",
-              style: TextStyle(color: Colors.blue, fontSize: 24.0, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Color(0xFF1E3A8A), fontSize: 24.0, fontWeight: FontWeight.bold),
             ),
             Text(
               "Alerts",
-              style: TextStyle(color: Colors.orange, fontSize: 24.0, fontWeight: FontWeight.bold),
+              style: TextStyle(color: Color(0xFF1E3A8A), fontSize: 24.0, fontWeight: FontWeight.bold),
             )
           ],
         ),
       ),
-      body: StreamBuilder(
+        
+      
+      body: Stack(
+        children: [
+          // Gradient background
+          Container(
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF91EAE4),
+                  Color(0xFF86A8E7),
+                  Color(0xFF7F7FD5),
+                ],
+              ),
+            ),
+          ),
+           // StreamBuilder wrapped inside a transparent Container to allow the background to show
+          Container(
+            color: Colors.transparent,  // Ensure transparency to see gradient
+           child:StreamBuilder(
         stream: FirebaseFirestore.instance.collection('news').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text("No news feeds available"));
+            return const Center(child: Text("No News Feeds available"));
           }
 
           final newsFeeds = snapshot.data!.docs;
@@ -119,10 +142,12 @@ class _NewsScreenState extends State<NewsScreen> {
               final date = newsFeed['date'] ?? 'No Date';
 
               return Card(
+              color: Color(0xFF86A8E7), // Blue background color for the card
                 margin: const EdgeInsets.all(10.0),
                 elevation: 5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),
+                  side: BorderSide(color: Colors.black, width: 2.0), // Black outline
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -132,7 +157,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       Text(
                         title,
                         style: const TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold,
+                          fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white,
                         ),
                       ),
                       SizedBox(height: 8.0),
@@ -140,7 +165,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         description.length > 50
                             ? '${description.substring(0, 50)}...'
                             : description,
-                        style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+                        style: const TextStyle(fontSize: 20.0, color: Colors.black),
                       ),
                       SizedBox(height: 8.0),
                       Row(
@@ -148,11 +173,11 @@ class _NewsScreenState extends State<NewsScreen> {
                         children: [
                           Text(
                             'Category: $category',
-                            style: const TextStyle(fontSize: 12.0),
+                            style: const TextStyle(fontSize: 20.0, color: Colors.white),
                           ),
                           Text(
                             'Region: $region',
-                            style: const TextStyle(fontSize: 12.0),
+                            style: const TextStyle(fontSize: 20.0, color: Colors.white),
                           ),
                         ],
                       ),
@@ -160,7 +185,7 @@ class _NewsScreenState extends State<NewsScreen> {
                       Text(
                         'Date: $date',
                         style: const TextStyle(
-                          fontSize: 12.0, fontStyle: FontStyle.italic,
+                          fontSize: 20.0, fontStyle: FontStyle.italic, color: Colors.white,
                         ),
                       ),
                       SizedBox(height: 16.0),
@@ -168,7 +193,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           // Update Button
-                          ElevatedButton.icon(
+                          TextButton.icon(
                             onPressed: () {
                               Navigator.push(
                                 context,
@@ -177,24 +202,29 @@ class _NewsScreenState extends State<NewsScreen> {
                                 ),
                               );
                             },
-                            icon: const Icon(Icons.edit),
-                            label: const Text("Update"),
+                            icon: const Icon(Icons.edit, color: Colors.black), // Icon color
+                            label: const SizedBox.shrink(), 
+                                 
+                        
                           ),
                           const SizedBox(width: 8.0),
                           // Delete Button (Trash icon)
                           IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete, color: Colors.black),
                             onPressed: () => _deleteNewsFeed(newsFeed.id),
-                          ),
-                        ],
+                                    ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

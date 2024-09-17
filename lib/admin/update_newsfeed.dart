@@ -59,12 +59,12 @@ class _UpdateNewsFeedState extends State<UpdateNewsFeed> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('News feed updated successfully')),
+          const SnackBar(content: Text('News Feed Updated Successfully')),
         );
         Navigator.pop(context); // Close the update screen
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update news feed: $e')),
+          SnackBar(content: Text('Failed to Update News Feed: $e')),
         );
       }
     }
@@ -80,9 +80,33 @@ class _UpdateNewsFeedState extends State<UpdateNewsFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Update News Feed"),
+        backgroundColor: const Color.fromARGB(255, 51, 142, 217),
+        title: const Text("Update News Feed",
+         style: TextStyle(
+                  color: Color(0xFF1E3A8A),
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                  )
+                  ),
       ),
-      body: _isLoading
+      body: Stack(
+        children: [
+          // Gradient background
+          Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF91EAE4),
+                  Color(0xFF86A8E7),
+                  Color(0xFF7F7FD5),
+                ],
+              ),
+            ),
+          ),
+          // Main content
+        _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
               padding: const EdgeInsets.all(16.0),
@@ -159,14 +183,27 @@ class _UpdateNewsFeedState extends State<UpdateNewsFeed> {
 
                       // Submit Button
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 51, 142, 217),
+                        padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0), // Increase button size
+                       shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(10.0),
+        ),   
+    ),
+
                         onPressed: _updateNewsFeed,
-                        child: const Text('Update News Feed'),
+                        child: const Text('Update News Feed',
+                         style:
+                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.black),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
+        ],
+      ),
     );
   }
 }
