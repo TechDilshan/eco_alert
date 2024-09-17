@@ -3,6 +3,7 @@ import 'adminAddImpactScreen.dart'; // Import the new screens
 import 'adminAddSafetyPlace.dart';
 import 'adminViewDonations.dart';
 import 'adminLogin.dart'; // Import the LoginScreen
+import 'newsscreen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -70,7 +71,7 @@ class AdminHomeScreen extends StatelessWidget {
                           Icons.article,
                           () => Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AdminAddImpactScreen()),
+                            MaterialPageRoute(builder: (context) => NewsScreen()),
                           ),
                         ),
                         // Fourth box - Display Donors Details
