@@ -189,7 +189,7 @@ class _AddNewsFeedState extends State<AddNewsFeed> {
               Center(
                 child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 51, 142, 217),
+                backgroundColor: const Color.fromARGB(255, 37, 108, 166),
                 padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 15.0), // Increase button size
                 shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),

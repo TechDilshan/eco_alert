@@ -27,13 +27,15 @@ class _NewsScreenState extends State<NewsScreen> {
                 SizedBox(height: 20),
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 10),
                 Text(description),
                 SizedBox(height: 10),
                 Text('Category: $category'),
+                SizedBox(height: 10),
                 Text('Region: $region'),
+                SizedBox(height: 10),
                 Text('Date: $date'),
                 SizedBox(height: 20),
                 ElevatedButton(
@@ -79,9 +81,10 @@ class _NewsScreenState extends State<NewsScreen> {
             MaterialPageRoute(builder: (context) => const AddNewsFeed()),
           );
         },
-        backgroundColor: Color(0xFF1E3A8A),
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
         child: const Icon(Icons.add),
       ),
+       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat, // Move FAB to the left side
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 51, 142, 217), // Blue theme color for the AppBar
         title: Row(
@@ -154,40 +157,86 @@ class _NewsScreenState extends State<NewsScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 24.0, fontWeight: FontWeight.bold, color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 8.0),
-                      Text(
-                        description.length > 50
-                            ? '${description.substring(0, 50)}...'
-                            : description,
-                        style: const TextStyle(fontSize: 20.0, color: Colors.black),
-                      ),
+                     Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    title,
+                                    style: const TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                       SizedBox(height: 8.0),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Category: $category',
-                            style: const TextStyle(fontSize: 20.0, color: Colors.white),
-                          ),
-                          Text(
-                            'Region: $region',
-                            style: const TextStyle(fontSize: 20.0, color: Colors.white),
-                          ),
-                        ],
-                      ),
+                              children: [
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text(
+                                    description,
+                                    style: const TextStyle(fontSize: 18.0, color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
                       SizedBox(height: 8.0),
-                      Text(
-                        'Date: $date',
-                        style: const TextStyle(
-                          fontSize: 20.0, fontStyle: FontStyle.italic, color: Colors.white,
-                        ),
-                      ),
+                        Row(
+                              children: [
+                                const Icon(Icons.category, color: Color(0xFF1D3557)), 
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text(
+                                    'Category: $category',
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    SizedBox(height: 8.0),
+                    Row(
+                              children: [
+                                const Icon(Icons.location_on, color: Color(0xFF1D3557)),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text(
+                                    'Region: $region',
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    SizedBox(height: 8.0),
+                      Row(
+                              children: [
+                                const Icon(Icons.date_range, color: Color(0xFF1D3557)),
+                                const SizedBox(width: 8.0),
+                                Expanded(
+                                  child: Text(
+                                    'Date: $date',
+                                    style: const TextStyle(
+                                      fontSize: 16.0,
+                                      fontStyle: FontStyle.italic,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                       SizedBox(height: 16.0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
