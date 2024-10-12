@@ -76,7 +76,8 @@ class _AddSafetyPlacePageState extends State<AdminAddSafetyPlacePage> {
                 child: ElevatedButton(
                   onPressed: _submitSafetyPlace,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
+                    backgroundColor: const Color.fromARGB(255, 22, 3, 163),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text(
                     'Submit',

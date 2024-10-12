@@ -47,7 +47,7 @@ class _AddNewsFeedState extends State<AddNewsFeed> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 51, 142, 217),
+        backgroundColor: const Color.fromARGB(255, 73, 95, 222),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

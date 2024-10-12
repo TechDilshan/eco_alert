@@ -13,7 +13,7 @@ class AdminHomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Admin Home'),
-        backgroundColor: const Color.fromARGB(255, 37, 108, 166), // Blue theme color
+        backgroundColor: const Color.fromARGB(255, 73, 95, 222),
       ),
       body: Container(
         decoration: const BoxDecoration(

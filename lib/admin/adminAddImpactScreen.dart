@@ -83,7 +83,8 @@ class _AddImpactPlacePageState extends State<AdminAddImpactScreen> {
                 child: ElevatedButton(
                   onPressed: _submitImpactPlace,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
+                    backgroundColor: const Color.fromARGB(255, 22, 3, 163),
+                    foregroundColor: Colors.white,
                   ),
                   child: const Text(
                     'Submit',

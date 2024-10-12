@@ -7,8 +7,9 @@ class AdminViewDonationsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('View Donations'),
-        backgroundColor: Colors.green, // Set the AppBar background color
+        backgroundColor: const Color.fromARGB(255, 73, 95, 222),
       ),
+      backgroundColor: const Color(0xFFF5F5F5), // Adding background color
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('donate').orderBy('timestamp', descending: true).snapshots(),
         builder: (context, snapshot) {
@@ -41,15 +42,30 @@ class AdminViewDonationsPage extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(16),
                   title: Text(
                     name,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18, // Increased font size for name
+                    ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Name: $name'),
-                      Text('Email: $email'),
-                      Text('Amount: \$${amount.toString()}'),
-                      Text('Comments: $comments'),
+                      Text(
+                        'Name: $name',
+                        style: const TextStyle(fontSize: 16), // Increased font size for details
+                      ),
+                      Text(
+                        'Email: $email',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Amount: \$${amount.toString()}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      Text(
+                        'Comments: $comments',
+                        style: const TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                   isThreeLine: true,

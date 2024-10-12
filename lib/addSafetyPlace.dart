@@ -17,7 +17,7 @@ class _AddSafetyPlacePageState extends State<AddSafetyPlacePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Safety Place'),
-        backgroundColor: Colors.purple, // Set the AppBar background color
+        backgroundColor: const Color.fromARGB(255, 37, 108, 166),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -143,7 +143,7 @@ class _AddSafetyPlacePageState extends State<AddSafetyPlacePage> {
                           onPressed: _submitSafetyPlace,
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                Colors.purple, // Consistent button color
+                                const Color.fromARGB(255, 59, 53, 212), // Consistent button color
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
